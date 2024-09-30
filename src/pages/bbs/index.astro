@@ -1,37 +1,32 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import Card from "../../components/Card.astro";
+import { supabase } from "../../lib/supabase";
 
-const response = await fetch('https://web-rahlzq0tu-dev-nergis-projects.vercel.app/api/post/list');
-const posts = await response.json();
+// Supabase에서 모든 게시물을 가져오는 함수
+async function fetchPosts() {
+  const { data, error } = await supabase
+    .from('posts')
+    .select('*');
+  
+  if (error) {
+    console.error('Error fetching posts:', error);
+    return [];
+  }
+  
+  return data;
+}
+
+// 페이지에서 Supabase 함수를 호출하여 데이터를 가져옴
+const posts = await fetchPosts();
 ---
-
 <Layout title="All Posts">
-  <h1>All Posts</h1>
-  <ul>
-    {posts.map((post: { id: any; title: unknown; }) => (
-      <Fragment key={post.id}>
-        <li>
-          <a href={`/bbs/${post.id}`}>{post.title}</a>
-        </li>
-      </Fragment>
+  <h1 class="text-3xl font-bold mb-4">All Posts</h1>
+  <ul class="space-y-4">
+    {posts.map((post: { id: string; title: string; content: string;}) => (
+      <li>
+        <Card href={`/bbs/${post.id}`} title={post.title} body={post.content} />
+      </li>
     ))}
   </ul>
 </Layout>
-
-<style>
-  h1 {
-    font-weight: bold;
-    font-size: 2rem;
-  }
-  ul {
-    list-style-type: disc;
-    padding-left: 1.25rem;
-  }
-  li {
-    margin-bottom: 0.5rem;
-  }
-  a {
-    color: #3b82f6;
-    text-decoration: underline;
-  }
-</style>
