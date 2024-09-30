@@ -9,9 +9,11 @@ import react from '@astrojs/react';
 
 import cloudflare from '@astrojs/cloudflare';
 
+import vercel from '@astrojs/vercel/serverless';
+
 // https://astro.build/config
 export default defineConfig({
   integrations: [tailwind(), icon(), react()],
   output: 'server',
-  adapter: cloudflare()
+  adapter: vercel()
 });
