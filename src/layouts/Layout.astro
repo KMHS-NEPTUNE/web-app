@@ -1,0 +1,143 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+
+import { Icon } from 'astro-icon/components'
+---
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="author" content="Your Name" />
+		<meta name="keywords" content="astro, academic calendar, school schedule" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content="Astro description" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://yourwebsite.com" />
+		<meta property="og:image" content="https://yourwebsite.com/image.jpg" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title}</title>
+	</head>
+
+	<body>
+		<nav class="navbar">
+			<ul class="navbar-menu">
+				<li class="navbar-home" style="position: absolute; left: 0;">
+					<a href="/">
+						<Icon name="mdi:home" class="home-icon" />
+					</a>
+				</li>
+				<li><a href="/AcademicCalendar">학사일정</a></li>
+				<li><a href="/contact">시간표</a></li>
+			</ul>
+		</nav>
+
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	@font-face {
+		src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+		font-family: "Pretendard Variable";
+		font-display: swap;
+	}
+
+	:root {
+		--accent: 136, 58, 234;
+		--accent-light: 224, 204, 250;
+		--accent-dark: 49, 10, 101;
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-light)) 30%,
+			white 60%
+		);
+	}
+
+	html {
+		font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+		background: #ffffff;
+	}
+
+	code {
+		font-family:
+			Menlo,
+			Monaco,
+			Lucida Console,
+			Liberation Mono,
+			DejaVu Sans Mono,
+			Bitstream Vera Sans Mono,
+			Courier New,
+			monospace;
+	}
+
+	.navbar {
+		background-color: #333;
+		padding: 1rem;
+	}
+
+	.navbar-menu {
+		list-style: none;
+		display: flex;
+		justify-content: center;
+		margin: 0;
+		padding: 0;
+	}
+
+	.navbar-home {
+		margin-right: auto;
+	}
+
+	.navbar-menu li {
+		margin: 0 1rem;
+	}
+
+	.navbar-menu a {
+		color: white;
+		text-decoration: none;
+	}
+
+	.home-icon {
+		width: 24px;
+		height: 24px;
+	}
+
+	/* 다크 모드 스타일 */
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--accent: 224, 204, 250;
+			--accent-light: 136, 58, 234;
+			--accent-dark: 224, 204, 250;
+			--accent-gradient: linear-gradient(
+				45deg,
+				rgb(var(--accent)),
+				rgb(var(--accent-light)) 30%,
+				black 60%
+			);
+		}
+
+		html {
+			background: rgba(0, 0, 0, 0.82);
+			color: #ffffff;
+		}
+
+		.navbar {
+			background-color: #222;
+		}
+
+		.navbar-menu a {
+			color: #ffffff;
+		}
+
+		.home-icon {
+			filter: invert(1);
+		}
+	}
+</style>
