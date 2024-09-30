@@ -1,0 +1,37 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const response = await fetch('/api/post/list');
+const posts = await response.json();
+---
+
+<Layout title="All Posts">
+  <h1>All Posts</h1>
+  <ul>
+    {posts.map((post: { id: any; title: unknown; }) => (
+      <Fragment key={post.id}>
+        <li>
+          <a href={`/bbs/${post.id}`}>{post.title}</a>
+        </li>
+      </Fragment>
+    ))}
+  </ul>
+</Layout>
+
+<style>
+  h1 {
+    font-weight: bold;
+    font-size: 2rem;
+  }
+  ul {
+    list-style-type: disc;
+    padding-left: 1.25rem;
+  }
+  li {
+    margin-bottom: 0.5rem;
+  }
+  a {
+    color: #3b82f6;
+    text-decoration: underline;
+  }
+</style>

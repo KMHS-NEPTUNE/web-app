@@ -1,0 +1,51 @@
+---
+import { supabase } from '../../lib/supabase';
+
+const postId = Astro.url.pathname.split('/').pop();
+const { data: post } = await supabase
+  .from('posts')
+  .select('*')
+  .eq('id', postId)
+  .single();
+const { data: comments } = await supabase
+  .from('comments')
+  .select('*')
+  .eq('post_id', postId);
+
+const handleComment = async (event: { preventDefault: () => void; target: { content: { value: any; }; }; }) => {
+  event.preventDefault();
+  const content = event.target.content.value;
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert('You must be logged in to comment.');
+    return;
+  }
+  const { data, error } = await supabase
+    .from('comments')
+    .insert([{ content, post_id: postId, user_id: user.id }]);
+  if (error) {
+    console.error('Error adding comment:', error);
+  } else {
+    window.location.reload();
+  }
+};
+---
+
+<html>
+  <body>
+    <h1>{post.title}</h1>
+    <p>{post.content}</p>
+
+    <h2>Comments</h2>
+    <ul>
+      {comments && comments.map(comment => (
+        <li>{comment.content}</li>
+      ))}
+    </ul>
+
+    <form on:submit={handleComment}>
+      <textarea name="content" placeholder="Add a comment" required></textarea>
+      <button type="submit">Comment</button>
+    </form>
+  </body>
+</html>
