@@ -1,13 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-const { cookies, redirect } = Astro;
-
-const accessToken = cookies.get("sb-access-token");
-const refreshToken = cookies.get("sb-refresh-token");
+const accessToken = Astro.cookies.get("sb-access-token");
+const refreshToken = Astro.cookies.get("sb-refresh-token");
 
 if (accessToken && refreshToken) {
-  return redirect("/dashboard");
+  return Astro.redirect("/dashboard");
 }
 ---
 
@@ -15,10 +13,34 @@ if (accessToken && refreshToken) {
   <h1>Sign in</h1>
   <p>New here? <a href="/register">Create an account</a></p>
   <form action="/api/auth/signin" method="post">
-    <label for="email">Email</label>
+    <label for="email" for="email">Email</label>
     <input type="email" name="email" id="email" />
     <label for="password">Password</label>
     <input type="password" name="password" id="password" />
     <button type="submit">Login</button>
   </form>
 </Layout>
+
+<style>
+  h1 {
+    @apply font-bold text-2xl;
+  }
+  p {
+    @apply text-gray-700 py-4;
+  }
+  a {
+    @apply underline text-blue-500;
+  }
+  form {
+    @apply w-1/2 space-y-4;
+  }
+  label {
+    @apply block mb-2 text-sm font-medium text-green-700 dark:text-green-500;
+  }
+  input {
+    @apply bg-green-50 border border-green-500 text-green-900  placeholder-green-700  text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5;
+  }
+  button {
+    @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none;
+  }
+</style>

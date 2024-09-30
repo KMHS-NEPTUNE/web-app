@@ -1,5 +1,3 @@
-export const prerender = true;
-
 import type { APIRoute } from "astro";
 import { supabase } from "../../../lib/supabase";
 
