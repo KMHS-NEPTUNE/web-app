@@ -1,20 +1,26 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "../../layouts/Layout.astro";
+const accessToken = Astro.cookies.get("sb-access-token");
+const refreshToken = Astro.cookies.get("sb-refresh-token");
+const redirectTo = Astro.url.searchParams.get("redirectTo") || "/dashboard";
+if (accessToken && refreshToken) {
+  return Astro.redirect(redirectTo);
+}
 ---
 
 
-<Layout title="Register">
-  <h1>Register</h1>
-  <p>Already have an account? <a href="/signin">Sign in</a></p>
-  <form action="/api/auth/register" method="post">
-    <label for="email" for="email">Email</label>
+<Layout title="Sign in">
+  <h1>Sign in</h1>
+  <p>New here? <a href="/register">Create an account</a></p>
+  <form action="/api/auth/signin" method="post">
+    <input type="hidden" name="redirectTo" value={redirectTo} />
+    <label for="email">Email</label>
     <input type="email" name="email" id="email" />
     <label for="password">Password</label>
     <input type="password" name="password" id="password" />
-    <button type="submit">Register</button>
+    <button type="submit">Login</button>
   </form>
 </Layout>
-
 <style>
   h1 {
     @apply font-bold text-2xl;

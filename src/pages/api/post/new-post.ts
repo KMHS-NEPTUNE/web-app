@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { supabase } from "../../../lib/supabase";
 
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request}) => {
   const formData = await request.formData();
   const title = formData.get("title")?.toString();
   const content = formData.get("content")?.toString();
@@ -15,13 +15,18 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     return new Response("You must be logged in to create a post", { status: 401 });
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('posts')
-    .insert([{ title, content, user_id: user.id }]);
+    .insert([{ title, content, user_id: user.id, created_at: new Date().toISOString() }]);
 
   if (error) {
     return new Response(error.message, { status: 500 });
   }
 
-  return new Response(JSON.stringify(data), { status: 201 });
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: "/bbs"
+    }
+  });
 };

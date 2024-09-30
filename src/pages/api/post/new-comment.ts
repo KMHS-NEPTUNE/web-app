@@ -1,4 +1,6 @@
 // new-comment.ts
+// noinspection ExceptionCaughtLocallyJS
+
 import type { APIRoute } from 'astro';
 import { supabase } from '../../../lib/supabase';
 
@@ -19,7 +21,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response("You must be logged in to create a post", { status: 401 });
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('comments')
       .insert([{ content: decodeURI(content), user_id: user.id, post_id }]);
 
