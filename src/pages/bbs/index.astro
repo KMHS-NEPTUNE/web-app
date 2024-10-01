@@ -7,7 +7,8 @@ import { supabase } from "../../lib/supabase";
 async function fetchPosts() {
   const { data, error } = await supabase
       .from('posts')
-      .select('*');
+      .select('*')
+      .order('id', { ascending: false });
 
   if (error) {
     console.error('Error fetching posts:', error);
@@ -20,11 +21,11 @@ async function fetchPosts() {
 // 페이지에서 Supabase 함수를 호출하여 데이터를 가져옴
 const posts = await fetchPosts();
 ---
-<Layout title="All Posts">
+<Layout title="모든 게시물" description="모든 게시물">
   <div class="flex justify-between items-center mb-4">
-    <h1 class="text-3xl font-bold">All Posts</h1>
+    <h1 class="text-3xl font-bold">모든 게시물</h1>
     <a href="/bbs/new-post" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
-      Create New Post
+      새로운 게시물 만들기
     </a>
   </div>
   <ul class="space-y-4">

@@ -2,18 +2,60 @@
 import Layout from "../../layouts/Layout.astro";
 import { supabase } from "../../lib/supabase";
 
+const accessToken = Astro.cookies.get("sb-access-token");
+const refreshToken = Astro.cookies.get("sb-refresh-token");
+if (!accessToken || !refreshToken) {
+  return Astro.redirect("/signin?redirectTo=" + Astro.url.pathname);;
+}
+const { error } = await supabase.auth.setSession({
+  refresh_token: refreshToken.value,
+  access_token: accessToken.value,
+});
+if (error) {
+  Astro.cookies.delete("sb-access-token", {
+    path: "/",
+  });
+  Astro.cookies.delete("sb-refresh-token", {
+    path: "/",
+  });
+  return Astro.redirect("/signin?redirectTo=" + Astro.url.pathname);
+}
+
 await supabase.auth.getUser();
 ---
-<Layout title="New Post">
+
+<Layout title="새로운 게시물 만들기" description="새로운 게시물 만들기">
   <h1>Create a New Post</h1>
-  <form action="/api/post/new-post" method="post">
-    <label for="title">Title</label>
+  <form id="postForm" action="/api/post/new-post" method="post" enctype="multipart/form-data">
+    <label for="title">제목</label>
     <input type="text" name="title" id="title" required />
-    <label for="content">Content</label>
+    <label for="content">내용</label>
     <textarea name="content" id="content" required></textarea>
-    <button type="submit">Create Post</button>
+    <label for="image">이미지 (최대 크기: 5MB)</label>
+    <input type="file" name="image" id="image" accept="image/*" />
+    <button type="submit">게시물 올리기</button>
   </form>
 </Layout>
+
+<script is:inline>
+  document.getElementById('postForm').addEventListener('submit', function(event) {
+    const fileInput = document.getElementById('image');
+    // noinspection JSUnresolvedReference
+    const file = fileInput.files[0];
+
+    if (!file) {
+      alert('제품 이미지를 선택해주세요.');
+      event.preventDefault();
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB in bytes
+      alert('이미지의 크기는 5MB 이하여야 합니다.');
+      event.preventDefault();
+    }
+  });
+</script>
+
 <style>
   h1 {
     @apply font-bold text-2xl;
