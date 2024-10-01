@@ -5,23 +5,46 @@ import { supabase } from "../../lib/supabase";
 
 // Supabase에서 모든 게시물을 가져오는 함수
 async function fetchPosts() {
-  const { data, error } = await supabase
+  const { data: posts, error: postsError } = await supabase
       .from('posts')
       .select('*')
       .order('id', { ascending: false });
 
-  if (error) {
-    console.error('Error fetching posts:', error);
+  if (postsError) {
+    console.error('Error fetching posts:', postsError);
     return [];
   }
 
-  return data;
+  // Fetch author information for each post
+  return await Promise.all(posts.map(async (post) => {
+    const {data: author, error: authorError} = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('user_id', post.user_id)
+        .single();
+
+    if (authorError) {
+      console.error('Error fetching author:', authorError);
+      return {...post, author: {username: 'Unknown'}};
+    }
+
+    return {...post, author};
+  }));
 }
 
 // 페이지에서 Supabase 함수를 호출하여 데이터를 가져옴
-const posts = await fetchPosts();
----
+type Post = {
+  id: string;
+  title: string;
+  content: string;
+  like_count: number;
+  dislike_count: number;
+  user_id: string;
+  author: { username: string };
+};
 
+const posts: Post[] = await fetchPosts();
+---
 
 <Layout title="모든 게시물" description="모든 게시물">
   <div class="flex justify-between items-center mb-4">
@@ -31,10 +54,11 @@ const posts = await fetchPosts();
     </a>
   </div>
   <ul class="space-y-4">
-    {posts.map((post: { id: string; title: string; content: string; like_count: number; dislike_count: number; }) => (
+    {posts.map((post: Post) => (
         <li>
           <Card href={`/bbs/${post.id}`} title={post.title} body={post.content} />
           <div class="flex space-x-4">
+            <span>작성자: {post.author.username}</span>
             <span>👍 {post.like_count}</span>
             <span>👎 {post.dislike_count}</span>
           </div>
