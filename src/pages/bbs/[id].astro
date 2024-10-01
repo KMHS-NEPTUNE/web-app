@@ -37,6 +37,12 @@ if (error) {
   <h1 class="text-3xl font-bold mb-4">{post.title}</h1>
   {post.image_url && <img src={post.image_url} alt={post.title} class="mb-6 max-w-full h-auto" style="max-width: 600px;" />}
   <p class="mb-6">{post.content}</p>
+  <div class="flex space-x-4 mb-6">
+    <span>👍 {post.like_count}</span>
+    <span>👎 {post.dislike_count}</span>
+    <button id="likeButton" class="px-2 py-1 bg-green-500 text-white rounded">Like</button>
+    <button id="dislikeButton" class="px-2 py-1 bg-red-500 text-white rounded">Dislike</button>
+  </div>
   <h2 class="text-2xl font-semibold mb-4">Comments</h2>
   <ul class="space-y-4 mb-6">
     {comments && comments.map(comment => (
@@ -51,3 +57,29 @@ if (error) {
     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Comment</button>
   </form>
 </Layout>
+
+<script is:inline>
+  const postId = window.location.pathname.split('/').pop();
+
+  document.getElementById('likeButton').addEventListener('click', async () => {
+    await fetch('/api/post/like-dislike', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ postId: postId, action: 'like' }),
+    });
+    location.reload();
+  });
+
+  document.getElementById('dislikeButton').addEventListener('click', async () => {
+    await fetch('/api/post/like-dislike', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ postId: postId, action: 'dislike' }),
+    });
+    location.reload();
+  });
+</script>

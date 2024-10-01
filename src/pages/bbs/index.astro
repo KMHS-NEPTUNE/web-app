@@ -21,6 +21,8 @@ async function fetchPosts() {
 // 페이지에서 Supabase 함수를 호출하여 데이터를 가져옴
 const posts = await fetchPosts();
 ---
+
+
 <Layout title="모든 게시물" description="모든 게시물">
   <div class="flex justify-between items-center mb-4">
     <h1 class="text-3xl font-bold">모든 게시물</h1>
@@ -29,9 +31,13 @@ const posts = await fetchPosts();
     </a>
   </div>
   <ul class="space-y-4">
-    {posts.map((post: { id: string; title: string; content: string;}) => (
+    {posts.map((post: { id: string; title: string; content: string; like_count: number; dislike_count: number; }) => (
         <li>
           <Card href={`/bbs/${post.id}`} title={post.title} body={post.content} />
+          <div class="flex space-x-4">
+            <span>👍 {post.like_count}</span>
+            <span>👎 {post.dislike_count}</span>
+          </div>
         </li>
     ))}
   </ul>
