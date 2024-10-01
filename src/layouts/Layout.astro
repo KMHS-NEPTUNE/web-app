@@ -27,6 +27,51 @@ import { Icon } from 'astro-icon/components'
 	</head>
 
 	<body>
+		<div class="auth-buttons">
+			<a href="/signin?redirectTo=/bbs/new-post" class="login-button">로그인</a>
+			<a href="/register" class="signup-button">회원가입</a>
+		</div>
+
+		<style>
+			.auth-buttons {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				display: flex;
+				gap: 10px;
+				z-index: 1000;
+			}
+
+			.login-button,
+			.signup-button {
+				padding: 8px 16px;
+				border: none;
+				border-radius: 4px;
+				font-size: 14px;
+				font-weight: bold;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+				text-decoration: none;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.login-button {
+				background-color: #2196F3;
+				color: white;
+			}
+
+			.signup-button {
+				background-color: #4CAF50;
+				color: white;
+			}
+
+			.login-button:hover,
+			.signup-button:hover {
+				opacity: 0.8;
+			}
+		</style>
 		<nav class="navbar">
 			<ul class="navbar-menu">
 				<li class="navbar-home" style="position: absolute; left: 0;">
@@ -35,7 +80,7 @@ import { Icon } from 'astro-icon/components'
 					</a>
 				</li>
 				<li><a href="/bbs">게시판</a></li>
-				<li><a href="/contact">시간표</a></li>
+				<li><a href="/contact">추천제품</a></li>
 			</ul>
 		</nav>
 
@@ -80,8 +125,8 @@ import { Icon } from 'astro-icon/components'
 	}
 
 	.navbar {
-		background-color: #333;
-		padding: 1rem;
+		background-color: #274c77;
+		padding: 2rem;
 	}
 
 	.navbar-menu {
@@ -103,6 +148,7 @@ import { Icon } from 'astro-icon/components'
 	.navbar-menu a {
 		color: white;
 		text-decoration: none;
+		font-weight: bold;
 	}
 
 	.home-icon {
