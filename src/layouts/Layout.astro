@@ -4,88 +4,85 @@ interface Props {
 	description: string;
 }
 
-const { title, description} = Astro.props;
-
-import { Icon } from 'astro-icon/components'
+const { title, description } = Astro.props;
+import { Icon } from 'astro-icon/components';
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="author" content="Your Name" />
-		<meta name="keywords" content="astro, academic calendar, school schedule" />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={Astro.url.href} />
-		<meta property="og:image" content="https://yourwebsite.com/image.jpg" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{title}</title>
-	</head>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="description" content={description} />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="generator" content={Astro.generator} />
+	<meta name="author" content="Your Name" />
+	<meta name="keywords" content="astro, academic calendar, school schedule" />
+	<meta property="og:title" content={title} />
+	<meta property="og:description" content={description} />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content={Astro.url.href} />
+	<meta property="og:image" content="https://yourwebsite.com/image.jpg" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<title>{title}</title>
+</head>
+<body>
+<style>
+	.auth-buttons {
+		position: absolute;
+		right: 0;
+		top: 20px;
+		right: 20px;
+		display: flex;
+		gap: 10px;
+		z-index: 1000;
+	}
 
-	<body>
+	.login-button,
+	.signup-button {
+		padding: 8px 16px;
+		border: none;
+		border-radius: 4px;
+		font-size: 14px;
+		font-weight: bold;
+		cursor: pointer;
+		transition: background-color 0.3s ease;
+		text-decoration: none;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.login-button {
+		background-color: #2196F3;
+		color: white;
+	}
+
+	.signup-button {
+		background-color: #4CAF50;
+		color: white;
+	}
+
+	.login-button:hover,
+	.signup-button:hover {
+		opacity: 0.8;
+	}
+</style>
+<nav class="navbar">
+	<ul class="navbar-menu">
+		<li class="navbar-home"style="position: absolute; left: 0;">
+			<a href="/">
+				<Icon name="mdi:home" class="home-icon" />
+			</a>
+		</li>
+		<li><a href="/bbs">게시판</a></li>
+		<li><a href="/contact">추천제품</a></li>
 		<div class="auth-buttons">
-			<a href="/signin?redirectTo=/bbs/new-post" class="login-button">로그인</a>
-			<a href="/register" class="signup-button">회원가입</a>
+			<li><a href="/signin" class="login-button">로그인</a></li>
+			<li><a href="/register" class="signup-button">회원가입</a></li>
 		</div>
-
-		<style>
-			.auth-buttons {
-				position: fixed;
-				top: 20px;
-				right: 20px;
-				display: flex;
-				gap: 10px;
-				z-index: 1000;
-			}
-
-			.login-button,
-			.signup-button {
-				padding: 8px 16px;
-				border: none;
-				border-radius: 4px;
-				font-size: 14px;
-				font-weight: bold;
-				cursor: pointer;
-				transition: background-color 0.3s ease;
-				text-decoration: none;
-				display: inline-flex;
-				align-items: center;
-				justify-content: center;
-			}
-
-			.login-button {
-				background-color: #2196F3;
-				color: white;
-			}
-
-			.signup-button {
-				background-color: #4CAF50;
-				color: white;
-			}
-
-			.login-button:hover,
-			.signup-button:hover {
-				opacity: 0.8;
-			}
-		</style>
-		<nav class="navbar">
-			<ul class="navbar-menu">
-				<li class="navbar-home" style="position: absolute; left: 0;">
-					<a href="/">
-						<Icon name="mdi:home" class="home-icon" />
-					</a>
-				</li>
-				<li><a href="/bbs">게시판</a></li>
-				<li><a href="/contact">추천제품</a></li>
-			</ul>
-		</nav>
-
-		<slot />
-	</body>
+	</ul>
+</nav>
+<slot />
+</body>
 </html>
 
 <style is:global>
@@ -113,20 +110,21 @@ import { Icon } from 'astro-icon/components'
 	}
 
 	code {
-		font-family:
-			Menlo,
-			Monaco,
-			Lucida Console,
-			Liberation Mono,
-			DejaVu Sans Mono,
-			Bitstream Vera Sans Mono,
-			Courier New,
-			monospace;
+		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
 	}
 
 	.navbar {
 		background-color: #274c77;
 		padding: 2rem;
+		position: fixed;
+		width: 100%;
+		top: 0;
+		left: 0;
+		z-index: 1000;
+	}
+
+	body {
+		padding-top: 6rem; /* 네비게이션 바의 높이만큼 패딩 추가 */
 	}
 
 	.navbar-menu {
@@ -156,7 +154,6 @@ import { Icon } from 'astro-icon/components'
 		height: 24px;
 	}
 
-	/* 다크 모드 스타일 */
 	@media (prefers-color-scheme: dark) {
 		:root {
 			--accent: 224, 204, 250;
