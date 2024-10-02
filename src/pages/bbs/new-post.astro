@@ -43,11 +43,11 @@ await supabase.auth.getUser();
     // noinspection JSUnresolvedReference
     const file = fileInput.files[0];
 
-    if (!file) {
-      alert('제품 이미지를 선택해주세요.');
-      event.preventDefault();
-      return;
-    }
+    //if (!file) {
+    //  alert('제품 이미지를 선택해주세요.');
+    //  event.preventDefault();
+    //  return;
+    //}
 
     if (file.size > 5 * 1024 * 1024) { // 5MB in bytes
       alert('이미지의 크기는 5MB 이하여야 합니다.');
