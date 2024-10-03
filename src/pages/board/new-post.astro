@@ -5,7 +5,7 @@ import { supabase } from "../../lib/supabase";
 const accessToken = Astro.cookies.get("sb-access-token");
 const refreshToken = Astro.cookies.get("sb-refresh-token");
 if (!accessToken || !refreshToken) {
-  return Astro.redirect("/signin?redirectTo=" + Astro.url.pathname);;
+  return Astro.redirect("/login?redirectTo=" + Astro.url.pathname);;
 }
 const { error } = await supabase.auth.setSession({
   refresh_token: refreshToken.value,
@@ -18,7 +18,7 @@ if (error) {
   Astro.cookies.delete("sb-refresh-token", {
     path: "/",
   });
-  return Astro.redirect("/signin?redirectTo=" + Astro.url.pathname);
+  return Astro.redirect("/login?redirectTo=" + Astro.url.pathname);
 }
 
 await supabase.auth.getUser();

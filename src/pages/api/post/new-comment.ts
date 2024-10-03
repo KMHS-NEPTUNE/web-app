@@ -32,7 +32,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(null, {
       status: 302,
       headers: {
-        Location: `/bbs/${post_id}`,
+        Location: `/board/${post_id}`,
       },
     });
 

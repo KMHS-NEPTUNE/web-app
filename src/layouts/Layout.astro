@@ -9,81 +9,67 @@ import { Icon } from 'astro-icon/components';
 ---
 
 <html lang="en">
-<head>
-	<meta charset="UTF-8" />
-	<meta name="description" content={description} />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="generator" content={Astro.generator} />
-	<meta name="author" content="Your Name" />
-	<meta name="keywords" content="astro, academic calendar, school schedule" />
-	<meta property="og:title" content={title} />
-	<meta property="og:description" content={description} />
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content={Astro.url.href} />
-	<meta property="og:image" content="https://yourwebsite.com/image.jpg" />
-	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-	<title>{title}</title>
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="author" content="Your Name" />
+		<meta name="keywords" content="astro, academic calendar, school schedule" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url.href} />
+		<meta property="og:image" content="https://yourwebsite.com/image.jpg" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title}</title>
+	</head>
+
+	<body>
+		<nav class="bg-gray-800 p-4">
+			<div class="container mx-auto flex justify-between items-center">
+				<!-- Left: Home Icon -->
+				<a href="/" class="text-white">
+					<Icon name="mdi:home" class="w-6 h-6" />
+				</a>
+
+				<!-- Center: 게시판 and 추천제품 -->
+				<div class="flex space-x-4">
+					<a href="/board" class="text-white">게시판</a>
+					<a href="/recommended-products" class="text-white">추천제품</a>
+				</div>
+
+				<!-- Right: 로그인 and 회원가입 -->
+				<div class="flex space-x-4">
+					<a href="/login" class="text-white">로그인</a>
+					<a href="/signup" class="text-white">회원가입</a>
+				</div>
+			</div>
+		</nav>
+		<slot />
+	</body>
+</html>
+
 <style>
-	.auth-buttons {
-		position: absolute;
-		right: 0;
-		top: 20px;
-		right: 20px;
-		display: flex;
-		gap: 10px;
-		z-index: 1000;
+	nav {
+		background-color: #2d3748;
+		padding: 1rem;
 	}
 
-	.login-button,
-	.signup-button {
-		padding: 8px 16px;
-		border: none;
-		border-radius: 4px;
-		font-size: 14px;
-		font-weight: bold;
-		cursor: pointer;
-		transition: background-color 0.3s ease;
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	a {
+		color: #ffffff;
 		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
 	}
 
-	.login-button {
-		background-color: #2196F3;
-		color: white;
-	}
-
-	.signup-button {
-		background-color: #4CAF50;
-		color: white;
-	}
-
-	.login-button:hover,
-	.signup-button:hover {
-		opacity: 0.8;
+	a:hover {
+		text-decoration: underline;
 	}
 </style>
-<nav class="navbar">
-	<ul class="navbar-menu">
-		<li class="navbar-home"style="position: absolute; left: 0;">
-			<a href="/">
-				<Icon name="mdi:home" class="home-icon" />
-			</a>
-		</li>
-		<li><a href="/bbs">게시판</a></li>
-		<li><a href="/contact">추천제품</a></li>
-		<div class="auth-buttons">
-			<li><a href="/signin" class="login-button">로그인</a></li>
-			<li><a href="/register" class="signup-button">회원가입</a></li>
-		</div>
-	</ul>
-</nav>
-<slot />
-</body>
-</html>
 
 <style is:global>
 	@font-face {
@@ -92,91 +78,17 @@ import { Icon } from 'astro-icon/components';
 		font-display: swap;
 	}
 
-	:root {
-		--accent: 136, 58, 234;
-		--accent-light: 224, 204, 250;
-		--accent-dark: 49, 10, 101;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
-	}
-
-	html {
+	* {
 		font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-		background: #ffffff;
 	}
 
 	code {
 		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
 	}
 
-	.navbar {
-		background-color: #274c77;
-		padding: 2rem;
-		position: fixed;
-		width: 100%;
-		top: 0;
-		left: 0;
-		z-index: 1000;
-	}
-
-	body {
-		padding-top: 6rem; /* 네비게이션 바의 높이만큼 패딩 추가 */
-	}
-
-	.navbar-menu {
-		list-style: none;
-		display: flex;
-		justify-content: center;
-		margin: 0;
-		padding: 0;
-	}
-
-	.navbar-home {
-		margin-right: auto;
-	}
-
-	.navbar-menu li {
-		margin: 0 1rem;
-	}
-
-	.navbar-menu a {
-		color: white;
-		text-decoration: none;
-		font-weight: bold;
-	}
-
-	.home-icon {
-		width: 24px;
-		height: 24px;
-	}
-
 	@media (prefers-color-scheme: dark) {
-		:root {
-			--accent: 224, 204, 250;
-			--accent-light: 136, 58, 234;
-			--accent-dark: 224, 204, 250;
-			--accent-gradient: linear-gradient(
-				45deg,
-				rgb(var(--accent)),
-				rgb(var(--accent-light)) 30%,
-				black 60%
-			);
-		}
-
 		html {
 			background: rgba(0, 0, 0, 0.82);
-			color: #ffffff;
-		}
-
-		.navbar {
-			background-color: #222;
-		}
-
-		.navbar-menu a {
 			color: #ffffff;
 		}
 	}

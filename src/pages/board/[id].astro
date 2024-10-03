@@ -22,7 +22,7 @@ const { data: user } = await supabase
 const accessToken = Astro.cookies.get("sb-access-token");
 const refreshToken = Astro.cookies.get("sb-refresh-token");
 if (!accessToken || !refreshToken) {
-  return Astro.redirect("/signin?redirectTo=" + Astro.url.pathname);
+  return Astro.redirect("/login?redirectTo=" + Astro.url.pathname);
 }
 const { error } = await supabase.auth.setSession({
   refresh_token: refreshToken.value,
@@ -35,7 +35,7 @@ if (error) {
   Astro.cookies.delete("sb-refresh-token", {
     path: "/",
   });
-  return Astro.redirect("/signin?redirectTo=" + Astro.url.pathname);
+  return Astro.redirect("/login?redirectTo=" + Astro.url.pathname);
 }
 
 //@ts-ignore
@@ -52,7 +52,7 @@ const commentsWithUsernames = await Promise.all(comments.map(async (comment) => 
 
 <Layout title={post.title} description="게시물">
   <h1 class="text-3xl font-bold mb-4">{post.title}</h1>
-  <p class="text-sm text-gray-500 mb-4">작성자: {user.username}</p>
+  <p class="text-sm text-gray-500 mb-4">작성자: {user?.username || 'Unknown'}</p>
   {post.image_url && <img src={post.image_url} alt={post.title} class="mb-6 max-w-full h-auto" style="max-width: 600px;" />}
   <p class="mb-6">{post.content}</p>
   <div class="flex space-x-4 mb-6">
@@ -65,7 +65,7 @@ const commentsWithUsernames = await Promise.all(comments.map(async (comment) => 
   <ul class="space-y-4 mb-6">
     {commentsWithUsernames && commentsWithUsernames.map(comment => (
         <li class="p-4 bg-gray-100 rounded-lg text-black">
-          <p class="text-sm text-gray-500 mb-2">작성자: {comment.username}</p>
+          <p class="text-sm text-gray-500 mb-2">작성자: {comment?.username || 'Unknown'}</p>
           {comment.content}
         </li>
     ))}

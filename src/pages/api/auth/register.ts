@@ -32,5 +32,5 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     return new Response("User data is null", { status: 500 });
   }
 
-  return redirect("/signin");
+  return redirect("/login");
 };
