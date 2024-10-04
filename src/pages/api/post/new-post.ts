@@ -40,8 +40,6 @@ export const POST: APIRoute = async ({ request }) => {
 
   return new Response(null, {
     status: 302,
-    headers: {
-      Location: "/board"
-    }
+    headers: { Location: "/board" }
   });
 };

@@ -10,23 +10,24 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const fileName = `${Date.now()}-${file.name}`;
-    const { error } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
         .from("Image")
         .upload(fileName, file, {
             cacheControl: "3600",
             upsert: false
         });
 
-    if (error) {
-        return new Response(error.message, { status: 500 });
+    if (uploadError) {
+        return new Response(uploadError.message, { status: 500 });
     }
 
-    const { data: { publicUrl }} = supabase.storage
+    // @ts-ignore
+    const { data: { publicUrl }, error: urlError } = supabase.storage
         .from("Image")
         .getPublicUrl(fileName);
 
-    if (error) {
-        return new Response(JSON.stringify({"error": "yet"}), { status: 500 });
+    if (urlError) {
+        return new Response(urlError.message, { status: 500 });
     }
 
     return new Response(JSON.stringify({ url: publicUrl }), {

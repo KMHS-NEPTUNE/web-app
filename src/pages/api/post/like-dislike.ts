@@ -10,17 +10,18 @@ export const POST: APIRoute = async ({ request }) => {
 
   const column = action === 'like' ? 'like_count' : 'dislike_count';
 
+  //@ts-ignore
   const { data: currentData, error: fetchError } = await supabase
       .from('posts')
       .select(column)
       .eq('id', postId)
-      .single();
+      .single() as { data: { like_count?: number; dislike_count?: number } };
 
   if (fetchError) {
     return new Response(JSON.stringify(fetchError), { status: 500 });
   }
 
-  const newValue = (currentData as { like_count: number; dislike_count: number })[column] + 1;
+  const newValue = (currentData[column as 'like_count' | 'dislike_count'] ?? 0) + 1;
 
   const { data, error } = await supabase
       .from('posts')
