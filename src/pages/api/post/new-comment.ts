@@ -13,7 +13,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      return new Response("You must be logged in to create a post", { status: 401 });
+      return new Response("You must be logged in to create a post", { status: 302, headers: { Location: `/login?redirectTo=/board/${post_id}` } });
     }
 
     const { error } = await supabase

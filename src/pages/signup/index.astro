@@ -3,17 +3,17 @@ import Layout from "../../layouts/Layout.astro";
 ---
 
 
-<Layout title="Register" description="Register">
-  <h1>Register</h1>
+<Layout title="SignUp" description="SignUp">
+  <h1>SignUp</h1>
   <p>Already have an account? <a href="/login">Login</a></p>
-  <form action="/api/auth/register" method="post">
+  <form action="/api/auth/signup" method="post">
     <label for="username">Name</label>
     <input type="text" name="username" id="username" />
     <label for="email">Email</label>
     <input type="email" name="email" id="email" />
     <label for="password">Password</label>
     <input type="password" name="password" id="password" />
-    <button type="submit">Register</button>
+    <button type="submit">SignUp</button>
   </form>
 </Layout>
 

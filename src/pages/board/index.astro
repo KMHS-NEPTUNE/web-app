@@ -3,7 +3,6 @@ import Layout from "../../layouts/Layout.astro";
 import Card from "../../components/Card.astro";
 import { supabase } from "../../lib/supabase";
 
-// Supabase에서 모든 게시물을 가져오는 함수
 async function fetchPosts() {
   const { data: posts, error: postsError } = await supabase
       .from('posts')
@@ -15,9 +14,8 @@ async function fetchPosts() {
     return [];
   }
 
-  // Fetch author information for each post
   return await Promise.all(posts.map(async (post) => {
-    const {data: author, error: authorError} = await supabase
+    const { data: author, error: authorError } = await supabase
         .from('profiles')
         .select('username')
         .eq('user_id', post.user_id)
@@ -25,14 +23,13 @@ async function fetchPosts() {
 
     if (authorError) {
       console.error('Error fetching author:', authorError);
-      return {...post, author: {username: 'Unknown'}};
+      return { ...post, author: { username: 'Unknown' }, image: post.image_url || '' };
     }
 
-    return {...post, author};
+    return { ...post, author, image: post.image_url || '' };
   }));
 }
 
-// 페이지에서 Supabase 함수를 호출하여 데이터를 가져옴
 type Post = {
   id: string;
   title: string;
@@ -41,6 +38,7 @@ type Post = {
   dislike_count: number;
   user_id: string;
   author: { username: string };
+  image: string;
 };
 
 const posts: Post[] = await fetchPosts();
@@ -56,7 +54,7 @@ const posts: Post[] = await fetchPosts();
   <ul class="space-y-4">
     {posts.map((post: Post) => (
         <li>
-          <Card href={`/board/${post.id}`} title={post.title} body={post.content} />
+          <Card href={`/board/${post.id}`} title={post.title} body={post.content} image={post.image} />
           <div class="flex space-x-4">
             <span>작성자: {post.author.username}</span>
             <span>👍 {post.like_count}</span>

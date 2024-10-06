@@ -3,51 +3,17 @@ import Layout from "../../layouts/Layout.astro";
 import { supabase } from '../../lib/supabase';
 
 const postId = Astro.url.pathname.split('/').pop();
-const { data: post } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('id', postId)
-    .single();
-const { data: comments } = await supabase
-    .from('comments')
-    .select('*')
-    .eq('post_id', postId);
+const { data: post } = await supabase.from('posts').select('*').eq('id', postId).single();
+const { data: comments } = await supabase.from('comments').select('*').eq('post_id', postId);
+const { data: user } = await supabase.from('profiles').select('*').eq('user_id', post.user_id).single();
+const { data: ratings } = await supabase.from('ratings').select('rating').eq('post_id', postId);
 
-const { data: user } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('user_id', post.user_id)
-    .single();
-
-const accessToken = Astro.cookies.get("sb-access-token");
-const refreshToken = Astro.cookies.get("sb-refresh-token");
-if (!accessToken || !refreshToken) {
-  return Astro.redirect("/login?redirectTo=" + Astro.url.pathname);
-}
-const { error } = await supabase.auth.setSession({
-  refresh_token: refreshToken.value,
-  access_token: accessToken.value,
-});
-if (error) {
-  Astro.cookies.delete("sb-access-token", {
-    path: "/",
-  });
-  Astro.cookies.delete("sb-refresh-token", {
-    path: "/",
-  });
-  return Astro.redirect("/login?redirectTo=" + Astro.url.pathname);
-}
-
-//@ts-ignore
-// Fetch usernames for each comment
-const commentsWithUsernames = await Promise.all(comments.map(async (comment) => {
-  const { data: commentUser } = await supabase
-      .from('profiles')
-      .select('username')
-      .eq('user_id', comment.user_id)
-      .single();
+const commentsWithUsernames = comments ? await Promise.all(comments.map(async (comment) => {
+  const { data: commentUser } = await supabase.from('profiles').select('username').eq('user_id', comment.user_id).single();
   return { ...comment, username: commentUser?.username };
-}));
+})) : [];
+
+const averageRating = ratings && ratings.length > 0 ? (ratings.reduce((acc, { rating }) => acc + rating, 0) / ratings.length).toFixed(1) : 'No ratings yet';
 ---
 
 <Layout title={post.title} description="게시물">
@@ -58,12 +24,29 @@ const commentsWithUsernames = await Promise.all(comments.map(async (comment) => 
   <div class="flex space-x-4 mb-6">
     <span>👍 {post.like_count}</span>
     <span>👎 {post.dislike_count}</span>
-    <button id="likeButton" class="px-2 py-1 bg-green-500 text-white rounded">Like</button>
-    <button id="dislikeButton" class="px-2 py-1 bg-red-500 text-white rounded">Dislike</button>
+    <button id="likeButton" class="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600">Like</button>
+    <button id="dislikeButton" class="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600">Dislike</button>
   </div>
+  <h2 class="text-2xl font-semibold mb-4">Rate this Post</h2>
+  <p class="text-lg mb-4">Average Rating: {averageRating}</p>
+  <form id="ratingForm" class="space-y-4">
+    <input type="hidden" name="post_id" value={postId} />
+    <div class="starpoint_wrap">
+      <div class="starpoint_box">
+        {Array.from({ length: 10 }, (_, i) => (
+            <>
+              <label for={`starpoint_${i + 1}`} class="label_star" title={((i + 1) / 2).toString()}><span class="blind">{(i + 1) / 2}점</span></label>
+              <input type="radio" name="rating" id={`starpoint_${i + 1}`} class="star_radio" value={(i + 1) / 2} />
+            </>
+        ))}
+        <span class="starpoint_bg"></span>
+      </div>
+    </div>
+    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Submit Rating</button>
+  </form>
   <h2 class="text-2xl font-semibold mb-4">Comments</h2>
   <ul class="space-y-4 mb-6">
-    {commentsWithUsernames && commentsWithUsernames.map(comment => (
+    {commentsWithUsernames.map(comment => (
         <li class="p-4 bg-gray-100 rounded-lg text-black">
           <p class="text-sm text-gray-500 mb-2">작성자: {comment?.username || 'Unknown'}</p>
           {comment.content}
@@ -79,28 +62,77 @@ const commentsWithUsernames = await Promise.all(comments.map(async (comment) => 
   </form>
 </Layout>
 
-<script is:inline>
+<script is:inline lang="js">
+  const starBox = document.querySelector('.starpoint_box');
+  let fixedRating = 0;
+
+  starBox.addEventListener('mousemove', (event) => {
+    if (fixedRating) return;
+    const rect = starBox.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const newRating = Math.ceil((mouseX / rect.width) * 10);
+    document.documentElement.style.setProperty('--i', newRating);
+  });
+
+  starBox.addEventListener('mouseleave', () => {
+    if (fixedRating) return;
+    document.documentElement.style.setProperty('--i', 0);
+  });
+
+  starBox.addEventListener('click', (event) => {
+    const rect = starBox.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    fixedRating = Math.ceil((mouseX / rect.width) * 10);
+    document.documentElement.style.setProperty('--i', fixedRating);
+  });
+
+  document.querySelectorAll('.star_radio').forEach((radio, index) => {
+    radio.addEventListener('change', () => {
+      fixedRating = index + 1;
+      document.documentElement.style.setProperty('--i', fixedRating);
+    });
+  });
+
   const postId = window.location.pathname.split('/').pop();
 
-  document.getElementById('likeButton').addEventListener('click', async () => {
+  const handleLikeDislike = async (action) => {
     await fetch('/api/post/like-dislike', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ postId: postId, action: 'like' }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ postId, action }),
     });
     location.reload();
-  });
+  };
 
-  document.getElementById('dislikeButton').addEventListener('click', async () => {
-    await fetch('/api/post/like-dislike', {
+  document.getElementById('likeButton').addEventListener('click', () => handleLikeDislike('like'));
+  document.getElementById('dislikeButton').addEventListener('click', () => handleLikeDislike('dislike'));
+
+  document.getElementById('ratingForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const response = await fetch('/api/post/rate', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ postId: postId, action: 'dislike' }),
+      body: formData,
     });
-    location.reload();
+    if (response.ok) {
+      alert('Rating submitted successfully');
+      location.reload();
+    } else if (response.status === 400) {
+      alert('You have already rated this post');
+    } else {
+      alert('Error submitting rating');
+    }
   });
 </script>
+
+<style>
+  :root {
+    --i: 0;
+  }
+  .starpoint_wrap { display: inline-block; }
+  .starpoint_box { position: relative; background: url(https://ido-archive.github.io/svc/etc/element/img/sp_star.png) 0 0 no-repeat; font-size: 0; }
+  .starpoint_box .starpoint_bg { display: block; position: absolute; top: 0; left: 0; height: 18px; background: url(https://ido-archive.github.io/svc/etc/element/img/sp_star.png) 0 -20px no-repeat; pointer-events: none; width: calc(var(--i) * 10%); }
+  .starpoint_box .label_star { display: inline-block; width: 10px; height: 18px; box-sizing: border-box; }
+  .starpoint_box .star_radio { opacity: 0; width: 0; height: 0; position: absolute; }
+  .blind { position: absolute; clip: rect(0 0 0 0); margin: -1px; width: 1px; height: 1px; overflow: hidden; }
+</style>

@@ -1,3 +1,53 @@
 ---
+import Layout from "../../layouts/Layout.astro";
+import recommendedProducts from "./data/recommended-products.json";
+import axios from 'axios';
 
+// Function to convert JPY to KRW
+const convertToKRW = async (priceInJPY: number) => {
+    const exchangeRate = (await axios.get("https://open.er-api.com/v6/latest/JPY")).data.rates.KRW; // 1 JPY = 10 KRW
+    return Math.floor(priceInJPY * exchangeRate);
+};
 ---
+
+<Layout title="Recommended Products" description="A list of recommended products">
+    <h1>Recommended Products</h1>
+    <hr />
+    <ul>
+        {recommendedProducts.map((product, index) => (
+                <>
+                    <li>
+                        <img src={product.image} alt={product.name} />
+                        <h2>{product.name}</h2>
+                        <p>{product.description}</p>
+                        <p>¥ {product.price} | ₩ {convertToKRW(Number(product.price))}</p>
+                    </li>
+                    {index < recommendedProducts.length - 1 && <hr />}
+                </>
+        ))}
+    </ul>
+</Layout>
+
+<style>
+    h1 {
+        @apply font-bold text-2xl;
+    }
+    ul {
+        @apply list-disc pl-5;
+    }
+    li {
+        @apply mb-4;
+    }
+    img {
+        @apply w-48 h-48 object-cover mb-2;
+    }
+    h2 {
+        @apply text-xl font-semibold;
+    }
+    p {
+        @apply text-gray-700;
+    }
+    hr {
+        @apply my-4 border-t border-gray-300;
+    }
+</style>

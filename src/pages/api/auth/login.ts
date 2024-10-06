@@ -7,6 +7,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   const provider = formData.get("provider")?.toString();
+  const redirectTo = formData.get("redirectTo")?.toString();
 
   const validProviders = ["google", "github", "discord"];
 
@@ -45,5 +46,11 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   cookies.set("sb-refresh-token", refresh_token, {
     path: "/",
   });
-  return redirect("/dashboard");
+
+    if (redirectTo !== undefined) {
+      return redirect(redirectTo);
+    }
+    else {
+      return redirect("/dashboard");
+    }
 };
