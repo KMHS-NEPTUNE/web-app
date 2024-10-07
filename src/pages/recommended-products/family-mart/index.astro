@@ -1,5 +1,5 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import Layout from "../../../layouts/Layout.astro";
 import recommendedProducts from "./data/recommended-products.json";
 import axios from 'axios';
 
@@ -11,18 +11,7 @@ const convertToKRW = async (priceInJPY: number) => {
 ---
 
 <Layout title="Recommended Products" description="A list of recommended products">
-    <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
-        <a href="/recommended-products/seven-eleven">
-            <img src="/cstore/1.png" alt="Seven Eleven" style="height: 50px;">
-        </a>
-        <a href="/recommended-products/lawson">
-            <img src="/cstore/3.svg" alt="Lawson" style="height: 50px;">
-        </a>
-        <a href="/recommended-products/family-mart">
-            <img src="/cstore/2.png" alt="Family Mart" style="height: 50px;">
-        </a>
-    </div>
-    <h1>추천 제품</h1>
+    <h1>Recommended Products</h1>
     <hr />
     <ul>
         {recommendedProducts.map((product, index) => (

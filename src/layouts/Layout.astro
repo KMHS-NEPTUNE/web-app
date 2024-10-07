@@ -2,9 +2,10 @@
 interface Props {
     title: string;
     description: string;
+    ogImage?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, ogImage } = Astro.props;
 import { Icon } from 'astro-icon/components';
 ---
 
@@ -20,7 +21,7 @@ import { Icon } from 'astro-icon/components';
         <meta property="og:description" content={description} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={Astro.url.href} />
-        <meta property="og:image" content="https://yourwebsite.com/image.jpg" />
+        <meta property="og:image" content={ogImage ? ogImage : ""} />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <title>{title}</title>
     </head>

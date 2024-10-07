@@ -18,7 +18,7 @@ async function fetchPosts() {
     const { data: author, error: authorError } = await supabase
         .from('profiles')
         .select('username')
-        .eq('user_id', post.user_id)
+        .eq('id', post.user_id)
         .single();
 
     if (authorError) {
