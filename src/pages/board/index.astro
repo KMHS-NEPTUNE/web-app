@@ -46,21 +46,38 @@ const posts: Post[] = await fetchPosts();
 
 <Layout title="모든 게시물" description="모든 게시물">
   <div class="flex justify-between items-center mb-4">
-    <h1 class="text-3xl font-bold">모든 게시물</h1>
-    <a href="/board/new-post" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
+    <h1 class="text-3xl font-bold text-gray-900">모든 게시물</h1>
+    <a href="/board/new-post" class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none mt-4">
       새로운 게시물 만들기
     </a>
   </div>
   <ul class="space-y-4">
-    {posts.map((post: Post) => (
+    {posts.map((post: Post, index) => (
+      <>
         <li>
           <Card href={`/board/${post.id}`} title={post.title} body={post.content} image={post.image} />
           <div class="flex space-x-4">
-            <span>작성자: {post.author.username}</span>
-            <span>👍 {post.like_count}</span>
-            <span>👎 {post.dislike_count}</span>
+            <span class="text-gray-900">작성자: {post.author.username}</span>
+            <span class="text-gray-900">👍 {post.like_count}</span>
+            <span class="text-gray-900">👎 {post.dislike_count}</span>
           </div>
         </li>
+        {index < posts.length - 1 && <hr class="border-gray-300" />}
+      </>
     ))}
   </ul>
 </Layout>
+
+<style>
+  body {
+    background-color: #ffffff;
+  }
+
+  span {
+    @apply text-gray-900;
+  }
+
+  hr {
+    @apply border-gray-300;
+  }
+</style>

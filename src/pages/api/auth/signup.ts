@@ -22,11 +22,12 @@ export const POST: APIRoute = async ({ request, redirect }) => {
 
   if (data.user) {
     const { error: profileError } = await supabase
+        .schema('public')
         .from('profiles')
-        .insert([{ 'user_id': data.user.id, username }]);
+        .insert([{ 'user_id': data.user.id, 'username': username }]);
 
     if (profileError) {
-      return new Response(profileError.message, { status: 500 });
+      return new Response('aaaaaaa', { status: 500 });
     }
   } else {
     return new Response("User data is null", { status: 500 });

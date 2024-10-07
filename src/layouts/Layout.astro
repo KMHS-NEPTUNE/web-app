@@ -1,7 +1,7 @@
 ---
 interface Props {
-	title: string;
-	description: string;
+    title: string;
+    description: string;
 }
 
 const { title, description } = Astro.props;
@@ -9,87 +9,76 @@ import { Icon } from 'astro-icon/components';
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="author" content="Your Name" />
-		<meta name="keywords" content="astro, academic calendar, school schedule" />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={Astro.url.href} />
-		<meta property="og:image" content="https://yourwebsite.com/image.jpg" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{title}</title>
-	</head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content={description} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content={Astro.generator} />
+        <meta name="author" content="Your Name" />
+        <meta name="keywords" content="astro, academic calendar, school schedule" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={Astro.url.href} />
+        <meta property="og:image" content="https://yourwebsite.com/image.jpg" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <title>{title}</title>
+    </head>
 
-	<body>
-		<nav class="bg-gray-800 p-4">
-			<div class="container mx-auto flex justify-between items-center">
-				<!-- Left: Home Icon -->
-				<a href="/" class="text-white">
-					<Icon name="mdi:home" class="w-6 h-6" />
-				</a>
+    <body class="bg-white text-gray-800">
+        <nav class="bg-gray-100 p-4 shadow-md">
+            <div class="container mx-auto flex justify-between items-center">
+                <!-- Left: Home Icon -->
+                <a href="/" class="text-gray-800">
+                    <Icon name="mdi:home" class="w-6 h-6" />
+                </a>
 
-				<!-- Center: 게시판 and 추천제품 -->
-				<div class="flex space-x-4">
-					<a href="/board" class="text-white">게시판</a>
-					<a href="/recommended-products" class="text-white">추천제품</a>
-				</div>
+                <!-- Center: 게시판 and 추천제품 -->
+                <div class="flex space-x-4">
+                    <a href="/board" class="text-gray-800 hover:text-blue-500">게시판</a>
+                    <a href="/recommended-products" class="text-gray-800 hover:text-blue-500">추천제품</a>
+                </div>
 
-				<!-- Right: 로그인 and 회원가입 -->
-				<div class="flex space-x-4">
-					<a href="/login" class="text-white">로그인</a>
-					<a href="/signup" class="text-white">회원가입</a>
-				</div>
-			</div>
-		</nav>
-		<slot />
-	</body>
+                <!-- Right: 로그인 and 회원가입 -->
+                <div class="flex space-x-4">
+                    <a href="/login" class="text-gray-800 hover:text-blue-500">로그인</a>
+                    <a href="/signup" class="text-gray-800 hover:text-blue-500">회원가입</a>
+                </div>
+            </div>
+        </nav>
+        <slot />
+    </body>
 </html>
 
 <style>
-	nav {
-		background-color: #2d3748;
-		padding: 1rem;
-	}
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-	.container {
-		max-width: 1200px;
-		margin: 0 auto;
-	}
+    a {
+        color: #4a5568; /* gray-800 */
+        text-decoration: none;
+    }
 
-	a {
-		color: #ffffff;
-		text-decoration: none;
-	}
-
-	a:hover {
-		text-decoration: underline;
-	}
+    a:hover {
+        color: #4299e1; /* blue-500 */
+        text-decoration: underline;
+    }
 </style>
 
 <style is:global>
-	@font-face {
-		src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
-		font-family: "Pretendard Variable";
-		font-display: swap;
-	}
+    @font-face {
+        src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+        font-family: "Pretendard Variable";
+        font-display: swap;
+    }
 
-	* {
-		font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-	}
+    * {
+        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    }
 
-	code {
-		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-	}
-
-	@media (prefers-color-scheme: dark) {
-		html {
-			background: rgba(0, 0, 0, 0.82);
-			color: #ffffff;
-		}
-	}
+    code {
+        font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+    }
 </style>
