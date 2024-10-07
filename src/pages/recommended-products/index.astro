@@ -11,54 +11,30 @@ const convertToKRW = async (priceInJPY: number) => {
 ---
 
 <Layout title="Recommended Products" description="A list of recommended products">
-    <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
-        <a href="/recommended-products/seven-eleven">
-            <img src="/cstore/1.png" alt="Seven Eleven" style="height: 50px;">
+    <div class="flex justify-around mb-5">
+        <a href="/recommended-products/seven-eleven" class="transition-transform transform hover:scale-105">
+            <img src="/cstore/1.png" alt="Seven Eleven" class="h-12">
         </a>
-        <a href="/recommended-products/lawson">
-            <img src="/cstore/3.svg" alt="Lawson" style="height: 50px;">
+        <a href="/recommended-products/lawson" class="transition-transform transform hover:scale-105">
+            <img src="/cstore/3.svg" alt="Lawson" class="h-12">
         </a>
-        <a href="/recommended-products/family-mart">
-            <img src="/cstore/2.png" alt="Family Mart" style="height: 50px;">
+        <a href="/recommended-products/family-mart" class="transition-transform transform hover:scale-105">
+            <img src="/cstore/2.png" alt="Family Mart" class="h-12">
         </a>
     </div>
-    <h1>추천 제품</h1>
-    <hr />
-    <ul>
+    <h1 class="font-bold text-2xl mb-4">추천 제품</h1>
+    <hr class="my-4 border-t border-gray-300" />
+    <ul class="list-disc pl-5">
         {recommendedProducts.map((product, index) => (
-                <>
-                    <li>
-                        <img src={product.image} alt={product.name} />
-                        <h2>{product.name}</h2>
-                        <p>{product.description}</p>
-                        <p>¥ {product.price} | ₩ {convertToKRW(Number(product.price))}</p>
-                    </li>
-                    {index < recommendedProducts.length - 1 && <hr />}
-                </>
+            <>
+                <li class="mb-4 p-4 bg-white shadow-lg rounded-lg transition-shadow hover:shadow-xl">
+                    <img src={product.image} alt={product.name} class="w-48 h-48 object-cover mb-2 rounded-lg">
+                    <h2 class="text-xl font-semibold mb-2">{product.name}</h2>
+                    <p class="text-gray-700 mb-2">{product.description}</p>
+                    <p class="text-gray-700">¥ {product.price} | ₩ {convertToKRW(Number(product.price))}</p>
+                </li>
+                {index < recommendedProducts.length - 1 && <hr class="my-4 border-t border-gray-300" />}
+            </>
         ))}
     </ul>
 </Layout>
-
-<style>
-    h1 {
-        @apply font-bold text-2xl;
-    }
-    ul {
-        @apply list-disc pl-5;
-    }
-    li {
-        @apply mb-4;
-    }
-    img {
-        @apply w-48 h-48 object-cover mb-2;
-    }
-    h2 {
-        @apply text-xl font-semibold;
-    }
-    p {
-        @apply text-gray-700;
-    }
-    hr {
-        @apply my-4 border-t border-gray-300;
-    }
-</style>

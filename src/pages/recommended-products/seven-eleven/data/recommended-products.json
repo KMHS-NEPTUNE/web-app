@@ -1,16 +1,30 @@
 [
   {
-    "id": 1,
-    "name": "R-1",
-    "description": "유산균이 매우 많이 들어있어서 쾌변에 도움을 주는 요구르트",
-    "price": "155",
-    "image": "/rp/image0.jpg"
+    "id": 3,
+    "name": "슈크림빵 푸딩",
+    "description": "슈크림빵 안에 푸딩이 들어간 형태로 바삭한 빵과 달달한 슈크림과 푸딩의 조화가 잘 이루어짐",
+    "price": "302",
+    "image": "https://cdn.discordapp.com/attachments/1292361159915208734/1292490054903660698/2024-10-06_231224.png?ex=6704956a&is=670343ea&hm=fbaa6f63dcb76695c67e332d61c358f6e781650a855e9e46b67b2bd8cb9d718f&"
   },
   {
-    "id": 2,
-    "name": "브륄레 ( BRULEE )",
-    "description": "단단한 카라멜 코팅 아래의 달콤한 바닐라 아이스크림 맛은 백화점에서 판매하는 고급 디저트",
-    "price": "376",
-    "image": "/rp/1728198684336.jpg"
+    "id": 4,
+    "name": "로스 커들릿 샌드",
+    "description": "부드러운 초코브라우니",
+    "price": "321",
+    "image": "https://cdn.discordapp.com/attachments/1292361159915208734/1292496625452974080/image.png?ex=67049b88&is=67034a08&hm=aad05de1dfa789eca331ff10fe3131687a3fc985bce9e9646522c773dc473f80&"
+  },
+  {
+    "id": 5,
+    "name": "타마고 산도",
+    "description": "계란 샌드위치, 다른 편의점에서도 비슷한 제품을 팔긴 하나, 세븐일레븐의 타마고 산도가 가장 인기가 있고 맛있따.",
+    "price": "224",
+    "image": "https://cdn.discordapp.com/attachments/1292361159915208734/1292499321270304850/2019_03_5f8ebd30e85b85cc3eab6bbb36fdc952_83754b8d18.png?ex=67049e0b&is=67034c8b&hm=0753c10f56e9ea9f781481ddec83d750f5dac77d517bc9abdb8caf84ed5188de&"
+  },
+  {
+    "id": 6,
+    "name": "레몬 유자 사이다",
+    "description": "심하게 달지 않고 적당한 탄산의 사이다이지만 유자와 레몬향이 독특한 맛을 만들어줍니다.",
+    "price": "100",
+    "image": "https://cdn.discordapp.com/attachments/1292361159915208734/1292501872527147149/image0.jpg?ex=6704a06b&is=67034eeb&hm=f29a73674492db42d946bb63bd98cc48d599997d1b3d8555067bf475f633970c&"
   }
 ]

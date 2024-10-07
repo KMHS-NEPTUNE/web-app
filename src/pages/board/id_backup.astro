@@ -29,6 +29,23 @@ const averageRating = ratings && ratings.length > 0 ? (ratings.reduce((acc, { ra
     <button id="likeButton" class="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600">Like</button>
     <button id="dislikeButton" class="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600">Dislike</button>
   </div>
+  <h2 class="text-2xl font-semibold mb-4">별점</h2>
+  <p class="text-lg mb-4">현재 별점: {averageRating}</p>
+  <form id="ratingForm" class="space-y-4">
+    <input type="hidden" name="post_id" value={postId} />
+    <div class="starpoint_wrap">
+      <div class="starpoint_box">
+        {Array.from({ length: 10 }, (_, i) => (
+            <>
+              <label for={`starpoint_${i + 1}`} class="label_star" title={((i + 1) / 2).toString()}><span class="blind">{(i + 1) / 2}점</span></label>
+              <input type="radio" name="rating" id={`starpoint_${i + 1}`} class="star_radio" value={(i + 1) / 2} />
+            </>
+        ))}
+        <span class="starpoint_bg"></span>
+      </div>
+    </div>
+    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Submit Rating</button>
+  </form>
   <h2 class="text-2xl font-semibold mb-4">댓글</h2>
   <ul class="space-y-4 mb-6">
     {commentsWithUsernames.map(comment => (
